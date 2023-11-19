@@ -102,12 +102,6 @@ int main(int argc, char* argv[]) {
     return 0;
 }
 
-int move(int board[GRID_SIZE][GRID_SIZE], int sx, int sy, int ex, int ey) {
-    board[ex][ey] = board[sx][sy];
-    board[sx][sy] = 0;
-    return 1;
-}
-
 void drawRect(SDL_Renderer* renderer, int x, int y, Uint32 color) {
     SDL_SetRenderDrawColor(renderer, color >> 16, (color >> 8) & 0xFF, color & 0xFF, 255);
     SDL_Rect rect = {x, y, CELL_SIZE, CELL_SIZE};
@@ -145,6 +139,15 @@ void drawGrid(SDL_Renderer* renderer, int board[GRID_SIZE][GRID_SIZE]) {
 }
 
 
+//This should be in nasm
+//This should also check if the move is valid
+int move(int board[GRID_SIZE][GRID_SIZE], int sx, int sy, int ex, int ey) {
+    board[ex][ey] = board[sx][sy];
+    board[sx][sy] = 0;
+    return 1;
+}
+
+//This should be in nasm
 void initializeBoard(int board[GRID_SIZE][GRID_SIZE]) {
     // Initialize all cells to 0
     for (int i = 0; i < GRID_SIZE; i++) {
@@ -162,6 +165,7 @@ void initializeBoard(int board[GRID_SIZE][GRID_SIZE]) {
     }
 }
 
+//Dont need this
 void printBoard(int board[GRID_SIZE][GRID_SIZE]) {
     for (int i = 0; i < GRID_SIZE; i++) {
         for (int j = 0; j < GRID_SIZE; j++) {
