@@ -10,6 +10,7 @@ void initializeBoard(int board[GRID_SIZE][GRID_SIZE]);
 void printBoard(int board[GRID_SIZE][GRID_SIZE]);
 void drawGrid(SDL_Renderer* renderer, int board[GRID_SIZE][GRID_SIZE]);
 void drawRect(SDL_Renderer* renderer, int x, int y, Uint32 color);
+int move(int board[GRID_SIZE][GRID_SIZE], int sx, int sy, int ex, int ey);
 
 const int WINDOW_WIDTH = 800;
 const int WINDOW_HEIGHT = 800;
@@ -55,6 +56,9 @@ int main(int argc, char* argv[]) {
 
     // Main loop
     while (!quit) {
+        int sx, sy;
+        int ex, ey;
+
         while (SDL_PollEvent(&e) != 0) {
             if (e.type == SDL_QUIT) {
                 quit = 1;
@@ -62,19 +66,22 @@ int main(int argc, char* argv[]) {
             else if (e.type == SDL_MOUSEBUTTONDOWN) {
                 int x, y;
                 SDL_GetMouseState(&x, &y);
-                x = x / CELL_SIZE;
-                y = y / CELL_SIZE;
+                sx = x / CELL_SIZE;
+                sy = y / CELL_SIZE;
 
-                printf("Mouse click at start (%d, %d)\n", x, y);
+                printf("Mouse click at start (%d, %d)\n", sx, sy);
 
             }
             else if (e.type == SDL_MOUSEBUTTONUP) {
                 int x, y;
                 SDL_GetMouseState(&x, &y);
-                x = x / CELL_SIZE;
-                y = y / CELL_SIZE;
+                ex = x / CELL_SIZE;
+                ey = y / CELL_SIZE;
 
-                printf("Mouse click at end (%d, %d)\n", x, y);
+                printf("Mouse click at end (%d, %d)\n", ex, ey);
+
+                int new_board = move(board, sx, sy, ex, ey);
+                printBoard(board);
             }
         }
 
@@ -84,6 +91,7 @@ int main(int argc, char* argv[]) {
         drawGrid(renderer, board);
 
         SDL_RenderPresent(renderer);
+        // printBoard(board);
     }
 
     // Destroy window
@@ -92,6 +100,12 @@ int main(int argc, char* argv[]) {
     SDL_Quit();
 
     return 0;
+}
+
+int move(int board[GRID_SIZE][GRID_SIZE], int sx, int sy, int ex, int ey) {
+    board[ex][ey] = board[sx][sy];
+    board[sx][sy] = 0;
+    return 1;
 }
 
 void drawRect(SDL_Renderer* renderer, int x, int y, Uint32 color) {
