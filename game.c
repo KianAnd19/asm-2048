@@ -8,7 +8,7 @@
 // Function declarations
 void initializeBoard(int board[GRID_SIZE][GRID_SIZE]);
 void printBoard(int board[GRID_SIZE][GRID_SIZE]);
-void drawGrid(SDL_Renderer* renderer);
+void drawGrid(SDL_Renderer* renderer, int board[GRID_SIZE][GRID_SIZE]);
 void drawRect(SDL_Renderer* renderer, int x, int y, Uint32 color);
 
 const int WINDOW_WIDTH = 800;
@@ -16,17 +16,8 @@ const int WINDOW_HEIGHT = 800;
 const int CELL_SIZE = 200;  // Size of each cell in the grid
 const int GRID_LINES_WIDTH = 5; // Width of the grid lines
 const int BOARD_SIZE = 4;   // 2048 is a 4x4 grid
+const Uint32 colours[11] = {0xFFFFFF, 0x80ffdb, 0x72efdd, 0x64dfdf, 0x56cfe1, 0x48bfe3, 0x4ea8de, 0x5390d9, 0x5e60ce, 0x6930c3, 0x7400b8};
 
-const Uint32 c1 = 0x80ffdb;
-const Uint32 c2 = 0x72efdd;
-const Uint32 c3 = 0x64dfdf;
-const Uint32 c4 = 0x56cfe1;
-const Uint32 c5 = 0x48bfe3;
-const Uint32 c6 = 0x4ea8de;
-const Uint32 c7 = 0x5390d9;
-const Uint32 c8 = 0x5e60ce;
-const Uint32 c9 = 0x6930c3;
-const Uint32 c10 = 0x7400b8;
 
 int main(int argc, char* argv[]) {
     SDL_Window* window = NULL;
@@ -58,6 +49,10 @@ int main(int argc, char* argv[]) {
     // Event handler
     SDL_Event e;
 
+    int board[GRID_SIZE][GRID_SIZE];
+    initializeBoard(board);
+    printBoard(board);
+
     // Main loop
     while (!quit) {
         while (SDL_PollEvent(&e) != 0) {
@@ -86,7 +81,7 @@ int main(int argc, char* argv[]) {
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // White color for background
         SDL_RenderClear(renderer);
 
-        drawGrid(renderer);
+        drawGrid(renderer, board);
 
         SDL_RenderPresent(renderer);
     }
@@ -105,9 +100,15 @@ void drawRect(SDL_Renderer* renderer, int x, int y, Uint32 color) {
     SDL_RenderFillRect(renderer, &rect);
 }
 
-void drawGrid(SDL_Renderer* renderer) {
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // Black color for grid lines
+void drawGrid(SDL_Renderer* renderer, int board[GRID_SIZE][GRID_SIZE]) {
+    // Drawing the cells
+    for (int i = 0; i < GRID_SIZE; i++) {
+        for (int j = 0; j < GRID_SIZE; j++){
+            drawRect(renderer, i * CELL_SIZE, j * CELL_SIZE, colours[board[i][j]]);
+        }
+    }
 
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // Black color for grid lines
     // Drawing vertical lines
     for (int i = 0; i <= BOARD_SIZE; i++) {
         SDL_RenderDrawLine(renderer, 
@@ -126,8 +127,6 @@ void drawGrid(SDL_Renderer* renderer) {
                            j * CELL_SIZE);
     }
 
-    // Drawing the cells
-    drawRect(renderer, 0, 0, c1);
 
 }
 
