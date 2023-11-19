@@ -9,6 +9,7 @@
 void initializeBoard(int board[GRID_SIZE][GRID_SIZE]);
 void printBoard(int board[GRID_SIZE][GRID_SIZE]);
 void drawGrid(SDL_Renderer* renderer);
+void drawRect(SDL_Renderer* renderer, int x, int y, Uint32 color);
 
 const int WINDOW_WIDTH = 800;
 const int WINDOW_HEIGHT = 800;
@@ -16,6 +17,16 @@ const int CELL_SIZE = 200;  // Size of each cell in the grid
 const int GRID_LINES_WIDTH = 5; // Width of the grid lines
 const int BOARD_SIZE = 4;   // 2048 is a 4x4 grid
 
+const Uint32 c1 = 0x80ffdb;
+const Uint32 c2 = 0x72efdd;
+const Uint32 c3 = 0x64dfdf;
+const Uint32 c4 = 0x56cfe1;
+const Uint32 c5 = 0x48bfe3;
+const Uint32 c6 = 0x4ea8de;
+const Uint32 c7 = 0x5390d9;
+const Uint32 c8 = 0x5e60ce;
+const Uint32 c9 = 0x6930c3;
+const Uint32 c10 = 0x7400b8;
 
 int main(int argc, char* argv[]) {
     SDL_Window* window = NULL;
@@ -53,6 +64,23 @@ int main(int argc, char* argv[]) {
             if (e.type == SDL_QUIT) {
                 quit = 1;
             }
+            else if (e.type == SDL_MOUSEBUTTONDOWN) {
+                int x, y;
+                SDL_GetMouseState(&x, &y);
+                x = x / CELL_SIZE;
+                y = y / CELL_SIZE;
+
+                printf("Mouse click at start (%d, %d)\n", x, y);
+
+            }
+            else if (e.type == SDL_MOUSEBUTTONUP) {
+                int x, y;
+                SDL_GetMouseState(&x, &y);
+                x = x / CELL_SIZE;
+                y = y / CELL_SIZE;
+
+                printf("Mouse click at end (%d, %d)\n", x, y);
+            }
         }
 
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // White color for background
@@ -69,6 +97,12 @@ int main(int argc, char* argv[]) {
     SDL_Quit();
 
     return 0;
+}
+
+void drawRect(SDL_Renderer* renderer, int x, int y, Uint32 color) {
+    SDL_SetRenderDrawColor(renderer, color >> 16, (color >> 8) & 0xFF, color & 0xFF, 255);
+    SDL_Rect rect = {x, y, CELL_SIZE, CELL_SIZE};
+    SDL_RenderFillRect(renderer, &rect);
 }
 
 void drawGrid(SDL_Renderer* renderer) {
@@ -92,11 +126,8 @@ void drawGrid(SDL_Renderer* renderer) {
                            j * CELL_SIZE);
     }
 
-
-    // This is the code that can fill in a rect
-    SDL_SetRenderDrawColor(renderer, 255, 234, 0, 255); // Black color for grid lines
-    SDL_Rect rect = {0, 0, CELL_SIZE, CELL_SIZE};
-    SDL_RenderFillRect(renderer, &rect);
+    // Drawing the cells
+    drawRect(renderer, 0, 0, c1);
 
 }
 
