@@ -8,9 +8,14 @@
 // Function declarations
 void initializeBoard(int board[GRID_SIZE][GRID_SIZE]);
 void printBoard(int board[GRID_SIZE][GRID_SIZE]);
+void drawGrid(SDL_Renderer* renderer);
 
-const int WINDOW_WIDTH = 640;
-const int WINDOW_HEIGHT = 480;
+const int WINDOW_WIDTH = 800;
+const int WINDOW_HEIGHT = 800;
+const int CELL_SIZE = 200;  // Size of each cell in the grid
+const int GRID_LINES_WIDTH = 5; // Width of the grid lines
+const int BOARD_SIZE = 4;   // 2048 is a 4x4 grid
+
 
 int main(int argc, char* argv[]) {
     SDL_Window* window = NULL;
@@ -42,21 +47,19 @@ int main(int argc, char* argv[]) {
     // Event handler
     SDL_Event e;
 
-    // While application is running
+    // Main loop
     while (!quit) {
-        // Handle events on queue
         while (SDL_PollEvent(&e) != 0) {
-            // User requests quit
             if (e.type == SDL_QUIT) {
                 quit = 1;
             }
         }
 
-        // Clear screen
-        SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0xFF);
+        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // White color for background
         SDL_RenderClear(renderer);
 
-        // Update screen
+        drawGrid(renderer);
+
         SDL_RenderPresent(renderer);
     }
 
@@ -67,6 +70,36 @@ int main(int argc, char* argv[]) {
 
     return 0;
 }
+
+void drawGrid(SDL_Renderer* renderer) {
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // Black color for grid lines
+
+    // Drawing vertical lines
+    for (int i = 0; i <= BOARD_SIZE; i++) {
+        SDL_RenderDrawLine(renderer, 
+                           i * CELL_SIZE, 
+                           0, 
+                           i * CELL_SIZE, 
+                           BOARD_SIZE * CELL_SIZE);
+    }
+
+    // Drawing horizontal lines
+    for (int j = 0; j <= BOARD_SIZE; j++) {
+        SDL_RenderDrawLine(renderer, 
+                           0, 
+                           j * CELL_SIZE, 
+                           BOARD_SIZE * CELL_SIZE, 
+                           j * CELL_SIZE);
+    }
+
+
+    // This is the code that can fill in a rect
+    SDL_SetRenderDrawColor(renderer, 255, 234, 0, 255); // Black color for grid lines
+    SDL_Rect rect = {0, 0, CELL_SIZE, CELL_SIZE};
+    SDL_RenderFillRect(renderer, &rect);
+
+}
+
 
 void initializeBoard(int board[GRID_SIZE][GRID_SIZE]) {
     // Initialize all cells to 0
