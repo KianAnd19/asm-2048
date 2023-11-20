@@ -1,4 +1,5 @@
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -135,6 +136,20 @@ void drawGrid(SDL_Renderer* renderer, int board[GRID_SIZE][GRID_SIZE]) {
                            j * CELL_SIZE);
     }
 
+    // TTF_Font* Sans = TTF_OpenFont("Sans.ttf", 24);
+
+    // SDL_Color White = {255, 255, 255};
+    // //Drawing the numbers
+
+    // SDL_Surface* surfaceMessage =
+    //     TTF_RenderText_Solid(Sans, "put your text here", White); 
+
+    // SDL_Texture* Message = SDL_CreateTextureFromSurface(renderer, surfaceMessage);
+
+
+
+    
+
 
 }
 
@@ -142,6 +157,8 @@ void drawGrid(SDL_Renderer* renderer, int board[GRID_SIZE][GRID_SIZE]) {
 //This should be in nasm
 //This should also check if the move is valid
 int move(int board[GRID_SIZE][GRID_SIZE], int sx, int sy, int ex, int ey) {
+    if (ex == sx && ey == sy) return 0;
+    if (ex - sx != 0 && ey - sy != 0) return 0;
     if(board[ex][ey] == 0) {
         board[ex][ey] = board[sx][sy]; 
         srand(time(NULL));
