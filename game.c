@@ -142,7 +142,22 @@ void drawGrid(SDL_Renderer* renderer, int board[GRID_SIZE][GRID_SIZE]) {
 //This should be in nasm
 //This should also check if the move is valid
 int move(int board[GRID_SIZE][GRID_SIZE], int sx, int sy, int ex, int ey) {
-    board[ex][ey] = board[sx][sy];
+    if(board[ex][ey] == 0) {
+        board[ex][ey] = board[sx][sy]; 
+        srand(time(NULL));
+        while (1) {
+            int r = rand() % GRID_SIZE;
+            int c = rand() % GRID_SIZE;
+            if (board[r][c] == 0) {
+                board[r][c] = 2;
+                break;
+            }
+        }
+    }
+    else if(board[ex][ey] == board[sx][sy]) {
+        board[ex][ey] *= 2;
+    } 
+    else return 0;
     board[sx][sy] = 0;
     return 1;
 }
