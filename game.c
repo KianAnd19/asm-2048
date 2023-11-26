@@ -12,6 +12,7 @@ void printBoard(int board[GRID_SIZE][GRID_SIZE]);
 void drawGrid(SDL_Renderer* renderer, int board[GRID_SIZE][GRID_SIZE]);
 void drawRect(SDL_Renderer* renderer, int x, int y, Uint32 color);
 int move(int board[GRID_SIZE][GRID_SIZE], int sx, int sy, int ex, int ey);
+void drawText(SDL_Renderer* renderer, char* text);
 
 const int WINDOW_WIDTH = 800;
 const int WINDOW_HEIGHT = 800;
@@ -90,6 +91,10 @@ int main(int argc, char* argv[]) {
         SDL_RenderClear(renderer);
 
         drawGrid(renderer, board);
+        drawText(renderer, "Hello World");
+        // Inside your main loop
+        // drawNumbers(board, renderer, font);
+
 
         SDL_RenderPresent(renderer);
         // printBoard(board);
@@ -108,6 +113,49 @@ void drawRect(SDL_Renderer* renderer, int x, int y, Uint32 color) {
     SDL_Rect rect = {x, y, CELL_SIZE, CELL_SIZE};
     SDL_RenderFillRect(renderer, &rect);
 }
+
+
+void drawText(SDL_Renderer* renderer, char* text) {
+    if (TTF_Init() != 0) {
+        printf("TTF_Init: %s\n", TTF_GetError());
+        // Handle error
+    }
+
+    TTF_Font* Sans = TTF_OpenFont("Arialn.ttf", 100);
+
+    // this is the color in rgb format,
+    // maxing out all would give you the color white,
+    // and it will be your text's color
+    SDL_Color Black = {0, 0, 0};
+
+    // as TTF_RenderText_Solid could only be used on
+    // SDL_Surface then you have to create the surface first
+    SDL_Surface* surfaceMessage =
+        TTF_RenderText_Solid(Sans, "Hello there", Black); 
+
+    // now you can convert it into a texture
+    SDL_Texture* Message = SDL_CreateTextureFromSurface(renderer, surfaceMessage);
+
+    SDL_Rect Message_rect; //create a rect
+    Message_rect.x = 100;  // Example position
+    Message_rect.y = 100;  // Example position
+    Message_rect.w = 200; // Adequate width
+    Message_rect.h = 50;  // Adequate height
+    // (0,0) is on the top left of the window/screen,
+    // think a rect as the text's box,
+    // that way it would be very simple to understand
+
+    // Now since it's a texture, you have to put RenderCopy
+    // in your game loop area, the area where the whole code executes
+
+    // you put the renderer's name first, the Message,
+    // the crop size (you can ignore this if you don't want
+    // to dabble with cropping), and the rect which is the size
+    // and coordinate of your texture
+    SDL_RenderCopy(renderer, Message, NULL, &Message_rect);
+}
+
+
 
 void drawGrid(SDL_Renderer* renderer, int board[GRID_SIZE][GRID_SIZE]) {
     // Drawing the cells

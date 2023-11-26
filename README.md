@@ -1,3 +1,3 @@
 # asm-2048
 
-`gcc -o myprogram game.c -lSDL2`
+`gcc game.c -lSDL2 -lSDL2_ttf -o game`
