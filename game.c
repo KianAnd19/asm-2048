@@ -139,56 +139,7 @@ void drawNumbers(SDL_Renderer* renderer, int board[GRID_SIZE][GRID_SIZE]) {
             SDL_DestroyTexture(Message);
         }
     }
-
-
-
-
-    
-
 }
-
-
-// void drawText(SDL_Renderer* renderer, char* text) {
-//     if (TTF_Init() != 0) {
-//         printf("TTF_Init: %s\n", TTF_GetError());
-//         // Handle error
-//     }
-
-//     TTF_Font* Sans = TTF_OpenFont("Arialn.ttf", 100);
-
-//     // this is the color in rgb format,
-//     // maxing out all would give you the color white,
-//     // and it will be your text's color
-//     SDL_Color Black = {0, 0, 0};
-
-//     // as TTF_RenderText_Solid could only be used on
-//     // SDL_Surface then you have to create the surface first
-//     SDL_Surface* surfaceMessage =
-//         TTF_RenderText_Solid(Sans, "Hello there", Black); 
-
-//     // now you can convert it into a texture
-//     SDL_Texture* Message = SDL_CreateTextureFromSurface(renderer, surfaceMessage);
-
-//     SDL_Rect Message_rect; //create a rect
-//     Message_rect.x = 100;  // Example position
-//     Message_rect.y = 100;  // Example position
-//     Message_rect.w = 200; // Adequate width
-//     Message_rect.h = 50;  // Adequate height
-//     // (0,0) is on the top left of the window/screen,
-//     // think a rect as the text's box,
-//     // that way it would be very simple to understand
-
-//     // Now since it's a texture, you have to put RenderCopy
-//     // in your game loop area, the area where the whole code executes
-
-//     // you put the renderer's name first, the Message,
-//     // the crop size (you can ignore this if you don't want
-//     // to dabble with cropping), and the rect which is the size
-//     // and coordinate of your texture
-//     SDL_RenderCopy(renderer, Message, NULL, &Message_rect);
-// }
-
-
 
 void drawGrid(SDL_Renderer* renderer, int board[GRID_SIZE][GRID_SIZE]) {
     // Drawing the cells
@@ -216,22 +167,6 @@ void drawGrid(SDL_Renderer* renderer, int board[GRID_SIZE][GRID_SIZE]) {
                            BOARD_SIZE * CELL_SIZE, 
                            j * CELL_SIZE);
     }
-
-    // TTF_Font* Sans = TTF_OpenFont("Sans.ttf", 24);
-
-    // SDL_Color White = {255, 255, 255};
-    // //Drawing the numbers
-
-    // SDL_Surface* surfaceMessage =
-    //     TTF_RenderText_Solid(Sans, "put your text here", White); 
-
-    // SDL_Texture* Message = SDL_CreateTextureFromSurface(renderer, surfaceMessage);
-
-
-
-    
-
-
 }
 
 
