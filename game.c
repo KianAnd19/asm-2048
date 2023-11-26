@@ -118,20 +118,25 @@ void drawNumbers(SDL_Renderer* renderer, int board[GRID_SIZE][GRID_SIZE]) {
     if (TTF_Init() != 0) {
         printf("TTF_Init: %s\n", TTF_GetError());
     }
-    TTF_Font* Sans = TTF_OpenFont("Arialn.ttf", 100);
+    TTF_Font* Sans = TTF_OpenFont("Arialn.ttf", 400);
 
     SDL_Color Black = {0, 0, 0};
 
 
     for (int i = 0; i < GRID_SIZE; i++) {
         for (int j = 0; j < GRID_SIZE; j++){
-            char str[12]; 
-            SDL_Surface* surfaceMessage = TTF_RenderText_Solid(Sans, "2", Black); 
+            if (board[i][j] == 0) continue;
+            char str[5];
+            int num = board[i][j];
+            sprintf(str, "%d", num);
+
+
+            SDL_Surface* surfaceMessage = TTF_RenderText_Solid(Sans, str, Black); 
             SDL_Texture* Message = SDL_CreateTextureFromSurface(renderer, surfaceMessage);
-            SDL_Rect Message_rect; //create a rect
-            Message_rect.x = i * CELL_SIZE;  // Example position
-            Message_rect.y = j * CELL_SIZE;  // Example position
-            Message_rect.w = CELL_SIZE; // Adequate width
+            SDL_Rect Message_rect;
+            Message_rect.x = i * CELL_SIZE;
+            Message_rect.y = j * CELL_SIZE;
+            Message_rect.w = CELL_SIZE;
             Message_rect.h = CELL_SIZE;
 
             SDL_RenderCopy(renderer, Message, NULL, &Message_rect);
