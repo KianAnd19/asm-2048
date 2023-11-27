@@ -176,52 +176,6 @@ void drawGrid(SDL_Renderer* renderer, int board[GRID_SIZE][GRID_SIZE]) {
     }
 }
 
-
-//This should be in nasm
-//This should also check if the move is valid
-// int move(int board[GRID_SIZE][GRID_SIZE], int sx, int sy, int ex, int ey) {
-//     // Check if the start and end points are the same
-//     if (ex == sx && ey == sy) return 0;
-
-//     // Move in a straight line (row or column)
-//     if (ex - sx != 0 && ey - sy != 0) return 0;
-
-//     // Check if path is clear
-//     int stepX = (ex - sx) != 0 ? (ex - sx) / abs(ex - sx) : 0; // 1, -1 or 0
-//     int stepY = (ey - sy) != 0 ? (ey - sy) / abs(ey - sy) : 0; // 1, -1 or 0
-
-//     int x, y;
-//     for (x = sx + stepX, y = sy + stepY; x != ex || y != ey; x += stepX, y += stepY) {
-//         if (board[x][y] != 0) return 0; // Path is not clear
-//     }
-
-//     // Check the end cell
-//     if (board[ex][ey] != 0 && board[ex][ey] != board[sx][sy]) return 0;
-
-//     // Move or combine
-//     if (board[ex][ey] == 0) {
-//         board[ex][ey] = board[sx][sy];
-//     } else if (board[ex][ey] == board[sx][sy]) {
-//         board[ex][ey] *= 2;
-//     }
-
-//     board[sx][sy] = 0;
-
-//     // Add a new tile
-//     srand(time(NULL)); // Note: Ideally, srand should be called only once at the start of the main function
-//     while (1) {
-//         int r = rand() % GRID_SIZE;
-//         int c = rand() % GRID_SIZE;
-//         if (board[r][c] == 0) {
-//             board[r][c] = 2;
-//             break;
-//         }
-//     }
-
-//     return 1; // Indicate a successful move
-// }
-
-
 //This should be in nasm
 void initializeBoard(int board[GRID_SIZE][GRID_SIZE]) {
     // Initialize all cells to 0
