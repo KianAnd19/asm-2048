@@ -2,7 +2,7 @@ section .data
     GRID_SIZE equ 4
 
 section .text
-global _move  ; If you're using NASM to compile for a system that uses leading underscores for symbols
+global move  ; If you're using NASM to compile for a system that uses leading underscores for symbols
 ; _move:
 move:
     ; Parameters: board (rdi), sx (esi), sy (edx), ex (ecx), ey (r8d)
