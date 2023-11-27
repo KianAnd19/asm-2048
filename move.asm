@@ -27,11 +27,37 @@ move:
     imul rax, ELEMENT_SIZE  ; rax = (ex * GRID_SIZE + ey) * ELEMENT_SIZE
     add rax, rdi            ; rax = address of board[ex][ey]
 
+    ; Check if the destination is empty
+    cmp dword [rax], 0      ; Compare board[ex][ey] with 0
+    jne .combine            ; If not equal, jump to .combine
+
+
 
     ; Update the board at [ex][ey] with the value from [sx][sy]
     mov dword [rax], ebx    ; board[ex][ey] = board[sx][sy] (32-bit value)
 
                   ; rax = 1 (success)
+    jmp .end
+
+.combine:
+    ; Check if the destination is equal to the source
+    cmp dword [rax], ebx    ; Compare board[ex][ey] with board[sx][sy]
+    jne .end                ; If not equal, jump to .end
+
+    ; Update the board at [ex][ey] with the value from [sx][sy]
+    mov dword [rax], ebx    ; board[ex][ey] = board[sx][sy] (32-bit value)
+
+    ; Multiply the value at [ex][ey] by 2
+    shl ebx, 1              ; ebx = board[ex][ey] * 2
+
+    ; Update the board at [ex][ey] with the new value
+    mov dword [rax], ebx    ; board[ex][ey] = board[ex][ey] * 2
+
+    ; rax = 1 (success)
+    jmp .end
+
+
+.end:
     mov rax, 1
     ret
 
