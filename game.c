@@ -17,6 +17,8 @@ void drawGrid(SDL_Renderer* renderer, int board[GRID_SIZE][GRID_SIZE]);
 void drawRect(SDL_Renderer* renderer, int x, int y, Uint32 color);
 // int move(int board[GRID_SIZE][GRID_SIZE], int sx, int sy, int ex, int ey);
 void drawNumbers(SDL_Renderer* renderer, int board[GRID_SIZE][GRID_SIZE]);
+int getRandomNumber(int max);
+void seedRandom();
 
 const int WINDOW_WIDTH = 800;
 const int WINDOW_HEIGHT = 800;
@@ -85,7 +87,6 @@ int main(int argc, char* argv[]) {
                 ey = y / CELL_SIZE;
 
                 printf("Mouse click at end (%d, %d)\n", ex, ey);
-
                 int new_board = move(board, sx, sy, ex, ey);
                 printBoard(board);
             }

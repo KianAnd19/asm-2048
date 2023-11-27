@@ -31,9 +31,9 @@ initializeBoard:
     add rax, rdi ; Two iterations
     mov dword [rax], 2  ; Set the random position to 2
 
-    
 
-    ;Add two '2's to random positions
+
+    ; Add two '2's to random positions
     ; mov rcx, 2  ; Two iterations
     ; .addTwo:
     ;     ; Get a random row and column
