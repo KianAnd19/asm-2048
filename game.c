@@ -6,6 +6,9 @@
 
 #define GRID_SIZE 4
 
+extern int move(int board[][GRID_SIZE], int sx, int sy, int ex, int ey);
+
+
 // Function declarations
 void initializeBoard(int board[GRID_SIZE][GRID_SIZE]);
 void printBoard(int board[GRID_SIZE][GRID_SIZE]);
@@ -210,7 +213,7 @@ int move(int board[GRID_SIZE][GRID_SIZE], int sx, int sy, int ex, int ey) {
         int r = rand() % GRID_SIZE;
         int c = rand() % GRID_SIZE;
         if (board[r][c] == 0) {
-            board[r][c] = 2; // Randomly 2 or 4
+            board[r][c] = 2;
             break;
         }
     }
