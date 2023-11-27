@@ -7,10 +7,11 @@
 #define GRID_SIZE 4
 
 extern int move(int board[][GRID_SIZE], int sx, int sy, int ex, int ey);
+extern void initializeBoard(int board[][GRID_SIZE]);
 
 
 // Function declarations
-void initializeBoard(int board[GRID_SIZE][GRID_SIZE]);
+// void initializeBoard(int board[GRID_SIZE][GRID_SIZE]);
 void printBoard(int board[GRID_SIZE][GRID_SIZE]);
 void drawGrid(SDL_Renderer* renderer, int board[GRID_SIZE][GRID_SIZE]);
 void drawRect(SDL_Renderer* renderer, int x, int y, Uint32 color);
@@ -111,6 +112,11 @@ int main(int argc, char* argv[]) {
     return 0;
 }
 
+//get random number
+int getRandomNumber(int max) {
+    return rand() % max;
+}
+
 void drawRect(SDL_Renderer* renderer, int x, int y, Uint32 color) {
     SDL_SetRenderDrawColor(renderer, color >> 16, (color >> 8) & 0xFF, color & 0xFF, 255);
     SDL_Rect rect = {x, y, CELL_SIZE, CELL_SIZE};
@@ -177,22 +183,22 @@ void drawGrid(SDL_Renderer* renderer, int board[GRID_SIZE][GRID_SIZE]) {
 }
 
 //This should be in nasm
-void initializeBoard(int board[GRID_SIZE][GRID_SIZE]) {
-    // Initialize all cells to 0
-    for (int i = 0; i < GRID_SIZE; i++) {
-        for (int j = 0; j < GRID_SIZE; j++) {
-            board[i][j] = 0;
-        }
-    }
+// void initializeBoard(int board[GRID_SIZE][GRID_SIZE]) {
+//     // Initialize all cells to 0
+//     for (int i = 0; i < GRID_SIZE; i++) {
+//         for (int j = 0; j < GRID_SIZE; j++) {
+//             board[i][j] = 0;
+//         }
+//     }
 
-    // Add two '2's to random positions
-    srand(time(NULL));
-    for (int i = 0; i < 2; i++) {
-        int r = rand() % GRID_SIZE;
-        int c = rand() % GRID_SIZE;
-        board[r][c] = 2;
-    }
-}
+//     // Add two '2's to random positions
+//     srand(time(NULL));
+//     for (int i = 0; i < 2; i++) {
+//         int r = rand() % GRID_SIZE;
+//         int c = rand() % GRID_SIZE;
+//         board[r][c] = 2;
+//     }
+// }
 
 //Dont need this
 void printBoard(int board[GRID_SIZE][GRID_SIZE]) {
