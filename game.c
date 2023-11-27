@@ -117,6 +117,10 @@ int getRandomNumber(int max) {
     return rand() % max;
 }
 
+void seedRandom() {
+    srand(time(NULL));
+}
+
 void drawRect(SDL_Renderer* renderer, int x, int y, Uint32 color) {
     SDL_SetRenderDrawColor(renderer, color >> 16, (color >> 8) & 0xFF, color & 0xFF, 255);
     SDL_Rect rect = {x, y, CELL_SIZE, CELL_SIZE};
