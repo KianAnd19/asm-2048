@@ -187,24 +187,6 @@ void drawGrid(SDL_Renderer* renderer, int board[GRID_SIZE][GRID_SIZE]) {
     }
 }
 
-//This should be in nasm
-// void initializeBoard(int board[GRID_SIZE][GRID_SIZE]) {
-//     // Initialize all cells to 0
-//     for (int i = 0; i < GRID_SIZE; i++) {
-//         for (int j = 0; j < GRID_SIZE; j++) {
-//             board[i][j] = 0;
-//         }
-//     }
-
-//     // Add two '2's to random positions
-//     srand(time(NULL));
-//     for (int i = 0; i < 2; i++) {
-//         int r = rand() % GRID_SIZE;
-//         int c = rand() % GRID_SIZE;
-//         board[r][c] = 2;
-//     }
-// }
-
 //Dont need this
 void printBoard(int board[GRID_SIZE][GRID_SIZE]) {
     for (int i = 0; i < GRID_SIZE; i++) {
