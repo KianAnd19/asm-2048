@@ -17,7 +17,7 @@ void drawGrid(SDL_Renderer* renderer, int board[GRID_SIZE][GRID_SIZE]);
 void drawRect(SDL_Renderer* renderer, int x, int y, Uint32 color);
 // int move(int board[GRID_SIZE][GRID_SIZE], int sx, int sy, int ex, int ey);
 void drawNumbers(SDL_Renderer* renderer, int board[GRID_SIZE][GRID_SIZE], TTF_Font* Sans);
-int getRandomNumber(int max);
+int getRandomNumber();
 void seedRandom();
 
 const int WINDOW_WIDTH = 800;
@@ -121,7 +121,9 @@ int main(int argc, char* argv[]) {
 }
 
 //get random number
-int getRandomNumber(int max) {
+int getRandomNumber() {\
+    int max = 4;
+    printf("hello");
     return rand() % max;
 }
 

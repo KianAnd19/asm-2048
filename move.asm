@@ -1,3 +1,5 @@
+extern getRandomNumber
+
 section .data
     GRID_SIZE equ 4
     ELEMENT_SIZE equ 4 ; Assuming each element in the board is a 32-bit integer
@@ -14,6 +16,9 @@ move:
     imul rax, ELEMENT_SIZE  ; rax = (sx * GRID_SIZE + sy) * ELEMENT_SIZE
     add rax, rdi            ; rax = address of board[sx][sy]
     mov ebx, dword [rax]    ; ebx = board[sx][sy] (32-bit value)
+
+
+
 
     ; Clear the source position
     mov dword [rax], 0      ; board[sx][sy] = 0
@@ -56,11 +61,38 @@ move:
     ; rax = 1 (success)
     jmp .end
 
-
 .end:
-    mov rax, 1
-    ret
 
+.new_piece:
+; new block here
+    push rdi
+    mov edi, GRID_SIZE
+    
+    call getRandomNumber
+    mov ebx, eax
+
+    call getRandomNumber
+    mov edx, eax
+    pop rdi
+
+    mov rax, rbx ; rax = row index
+    imul rax, GRID_SIZE ; rax = row index * GRID_SIZE
+    add rax, rdx ; rax = row index * GRID_SIZE + column index
+    imul rax, ELEMENT_SIZE ; rax = (row index * GRID_SIZE + column index) * ELEMENT_SIZE
+    add rax, rdi ; rax = address of board[random_row][random_column]
+
+    ; Check if the random position is empty
+    cmp dword [rax], 0
+    jne .new_piece ; if it isnt empty try again
+
+    mov dword [rax], 2
+
+    mov rax, 1
+    jne .done
+
+
+.done:
+    ret
 
 
 
