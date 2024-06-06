@@ -16,7 +16,7 @@ void printBoard(int board[GRID_SIZE][GRID_SIZE]);
 void drawGrid(SDL_Renderer* renderer, int board[GRID_SIZE][GRID_SIZE]);
 void drawRect(SDL_Renderer* renderer, int x, int y, Uint32 color);
 // int move(int board[GRID_SIZE][GRID_SIZE], int sx, int sy, int ex, int ey);
-void drawNumbers(SDL_Renderer* renderer, int board[GRID_SIZE][GRID_SIZE]);
+void drawNumbers(SDL_Renderer* renderer, int board[GRID_SIZE][GRID_SIZE], TTF_Font* Sans);
 int getRandomNumber(int max);
 void seedRandom();
 
@@ -31,6 +31,13 @@ const Uint32 colours[11] = {0xFFFFFF, 0x80ffdb, 0x72efdd, 0x64dfdf, 0x56cfe1, 0x
 int main(int argc, char* argv[]) {
     SDL_Window* window = NULL;
     SDL_Renderer* renderer = NULL;
+    
+    if (TTF_Init() != 0) {
+        printf("TTF_Init: %s\n", TTF_GetError());
+        return 1;
+    }
+
+    TTF_Font* Sans = TTF_OpenFont("Arialn.ttf", 600);
 
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         printf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
@@ -62,6 +69,7 @@ int main(int argc, char* argv[]) {
     initializeBoard(board);
     printBoard(board);
 
+
     // Main loop
     while (!quit) {
         int sx, sy;
@@ -91,12 +99,11 @@ int main(int argc, char* argv[]) {
                 printBoard(board);
             }
         }
-
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // White color for background
         SDL_RenderClear(renderer);
 
         drawGrid(renderer, board);
-        drawNumbers(renderer, board);
+        drawNumbers(renderer, board, Sans);
         // Inside your main loop
         // drawNumbers(board, renderer, font);
 
@@ -128,12 +135,7 @@ void drawRect(SDL_Renderer* renderer, int x, int y, Uint32 color) {
     SDL_RenderFillRect(renderer, &rect);
 }
 
-void drawNumbers(SDL_Renderer* renderer, int board[GRID_SIZE][GRID_SIZE]) {
-    if (TTF_Init() != 0) {
-        printf("TTF_Init: %s\n", TTF_GetError());
-    }
-    TTF_Font* Sans = TTF_OpenFont("Arialn.ttf", 600);
-
+void drawNumbers(SDL_Renderer* renderer, int board[GRID_SIZE][GRID_SIZE], TTF_Font* Sans) {
     SDL_Color Black = {0, 0, 0};
 
 
