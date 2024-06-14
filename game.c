@@ -6,16 +6,13 @@
 
 #define GRID_SIZE 4
 
-extern int move(int board[][GRID_SIZE], int sx, int sy, int ex, int ey);
+extern int move(int board[][GRID_SIZE], int dir);
 extern void initializeBoard(int board[][GRID_SIZE]);
 
-
 // Function declarations
-// void initializeBoard(int board[GRID_SIZE][GRID_SIZE]);
 void printBoard(int board[GRID_SIZE][GRID_SIZE]);
 void drawGrid(SDL_Renderer* renderer, int board[GRID_SIZE][GRID_SIZE]);
 void drawRect(SDL_Renderer* renderer, int x, int y, Uint32 color);
-// int move(int board[GRID_SIZE][GRID_SIZE], int sx, int sy, int ex, int ey);
 void drawNumbers(SDL_Renderer* renderer, int board[GRID_SIZE][GRID_SIZE], TTF_Font* Sans);
 int getRandomNumber();
 void seedRandom();
@@ -77,70 +74,26 @@ int main(int argc, char* argv[]) {
 
         while (SDL_PollEvent(&e) != 0) {
 
-            if (e.type == SDL_QUIT) {
-                printf("Quit");
-                quit = 1;
-            }
+            if (e.type == SDL_QUIT) quit = 1;
 
             if (e.type == SDL_KEYDOWN)
             {
-                switch(e.key.keysym.sym) {
-                    case SDLK_UP:
-                        printf("Up");
-                        break;
-
-                    case SDLK_RIGHT:
-                        printf("Right");
-                        break;
-                    
-                    case SDLK_LEFT:
-                        printf("Left");
-                        break;
-                    
-                    case SDLK_DOWN:
-                        printf("Down");
-                        break;
-
-                    default:
-                        printf("Unknown key!");
-                        break;
+                int dir = e.key.keysym.sym - SDLK_RIGHT;
+                if (dir < 0 || dir > 3) {
+                    printf("Unknown key!");
+                } else {
+                    int new_board = move(board, dir);
+                    printBoard(board);
                 }
             }
-
-            // if (e.type == SDL_QUIT) {
-            //     quit = 1;
-            // }
-            // else if (e.type == SDL_MOUSEBUTTONDOWN) {
-            //     int x, y;
-            //     SDL_GetMouseState(&x, &y);
-            //     sx = x / CELL_SIZE;
-            //     sy = y / CELL_SIZE;
-
-            //     printf("Mouse click at start (%d, %d)\n", sx, sy);
-
-            // }
-            // else if (e.type == SDL_MOUSEBUTTONUP) {
-            //     int x, y;
-            //     SDL_GetMouseState(&x, &y);
-            //     ex = x / CELL_SIZE;
-            //     ey = y / CELL_SIZE;
-
-            //     printf("Mouse click at end (%d, %d)\n", ex, ey);
-            //     int new_board = move(board, sx, sy, ex, ey);
-            //     printBoard(board);
-            // }
         }
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // White color for background
         SDL_RenderClear(renderer);
 
         drawGrid(renderer, board);
         drawNumbers(renderer, board, Sans);
-        // Inside your main loop
-        // drawNumbers(board, renderer, font);
-
 
         SDL_RenderPresent(renderer);
-        // printBoard(board);
     }
 
     // Destroy window
@@ -154,7 +107,6 @@ int main(int argc, char* argv[]) {
 //get random number
 int getRandomNumber() {\
     int max = 4;
-    printf("hello");
     return rand() % max;
 }
 
@@ -170,7 +122,6 @@ void drawRect(SDL_Renderer* renderer, int x, int y, Uint32 color) {
 
 void drawNumbers(SDL_Renderer* renderer, int board[GRID_SIZE][GRID_SIZE], TTF_Font* Sans) {
     SDL_Color Black = {0, 0, 0};
-
 
     for (int i = 0; i < GRID_SIZE; i++) {
         for (int j = 0; j < GRID_SIZE; j++){
@@ -205,20 +156,12 @@ void drawGrid(SDL_Renderer* renderer, int board[GRID_SIZE][GRID_SIZE]) {
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // Black color for grid lines
     // Drawing vertical lines
     for (int i = 0; i <= BOARD_SIZE; i++) {
-        SDL_RenderDrawLine(renderer, 
-                           i * CELL_SIZE, 
-                           0, 
-                           i * CELL_SIZE, 
-                           BOARD_SIZE * CELL_SIZE);
+        SDL_RenderDrawLine(renderer, i * CELL_SIZE, 0, i * CELL_SIZE, BOARD_SIZE * CELL_SIZE);
     }
 
     // Drawing horizontal lines
     for (int j = 0; j <= BOARD_SIZE; j++) {
-        SDL_RenderDrawLine(renderer, 
-                           0, 
-                           j * CELL_SIZE, 
-                           BOARD_SIZE * CELL_SIZE, 
-                           j * CELL_SIZE);
+        SDL_RenderDrawLine(renderer, 0, j * CELL_SIZE, BOARD_SIZE * CELL_SIZE, j * CELL_SIZE);
     }
 }
 

@@ -10,58 +10,85 @@ move:
     ; Parameters: board (rdi), sx (esi), sy (edx), ex (ecx), ey (r8d)
 
     ; Calculate source offset (sx, sy)
-    mov rax, rsi            ; rax = sx
-    imul rax, GRID_SIZE     ; rax = sx * GRID_SIZE
-    add rax, rdx            ; rax = sx * GRID_SIZE + sy
-    imul rax, ELEMENT_SIZE  ; rax = (sx * GRID_SIZE + sy) * ELEMENT_SIZE
-    add rax, rdi            ; rax = address of board[sx][sy]
-    mov ebx, dword [rax]    ; ebx = board[sx][sy] (32-bit value)
+;     mov rax, rsi            ; rax = sx
+;     imul rax, GRID_SIZE     ; rax = sx * GRID_SIZE
+;     add rax, rdx            ; rax = sx * GRID_SIZE + sy
+;     imul rax, ELEMENT_SIZE  ; rax = (sx * GRID_SIZE + sy) * ELEMENT_SIZE
+;     add rax, rdi            ; rax = address of board[sx][sy]
+;     mov ebx, dword [rax]    ; ebx = board[sx][sy] (32-bit value)
+    cmp esi, 0
+    je .right
+
+    cmp esi, 1
+    je .left
+
+    cmp esi, 2
+    je .down
+
+    cmp esi, 3
+    je .up
 
 
 
 
-    ; Clear the source position
-    mov dword [rax], 0      ; board[sx][sy] = 0
-
-    ; Calculate destination offset (ex, ey)
-    ; Calculate destination offset (ex, ey)
-    mov rax, rcx            ; rax = ex
-    imul rax, GRID_SIZE     ; rax = ex * GRID_SIZE
-    mov r9d, r8d            ; Move ey to r9d (32-bit) and zero-extend to r9
-    add rax, r9             ; rax = ex * GRID_SIZE + ey
-    imul rax, ELEMENT_SIZE  ; rax = (ex * GRID_SIZE + ey) * ELEMENT_SIZE
-    add rax, rdi            ; rax = address of board[ex][ey]
-
-    ; Check if the destination is empty
-    cmp dword [rax], 0      ; Compare board[ex][ey] with 0
-    jne .combine            ; If not equal, jump to .combine
+.up:
+    jmp .new_piece
 
 
+.right:
+    jmp .new_piece
 
-    ; Update the board at [ex][ey] with the value from [sx][sy]
-    mov dword [rax], ebx    ; board[ex][ey] = board[sx][sy] (32-bit value)
 
-                  ; rax = 1 (success)
-    jmp .end
+.left:
+    jmp .new_piece
 
-.combine:
-    ; Check if the destination is equal to the source
-    cmp dword [rax], ebx    ; Compare board[ex][ey] with board[sx][sy]
-    jne .end                ; If not equal, jump to .end
 
-    ; Update the board at [ex][ey] with the value from [sx][sy]
-    mov dword [rax], ebx    ; board[ex][ey] = board[sx][sy] (32-bit value)
+.down:
+    jmp .new_piece
 
-    ; Multiply the value at [ex][ey] by 2
-    shl ebx, 1              ; ebx = board[ex][ey] * 2
 
-    ; Update the board at [ex][ey] with the new value
-    mov dword [rax], ebx    ; board[ex][ey] = board[ex][ey] * 2
 
-    ; rax = 1 (success)
-    jmp .end
+;     ; Clear the source position
+;     mov dword [rax], 0      ; board[sx][sy] = 0
+;     ; Calculate destination offset (ex, ey)
+;     ; Calculate destination offset (ex, ey)
+;     mov rax, rcx            ; rax = ex
+;     imul rax, GRID_SIZE     ; rax = ex * GRID_SIZE
+;     mov r9d, r8d            ; Move ey to r9d (32-bit) and zero-extend to r9
+;     add rax, r9             ; rax = ex * GRID_SIZE + ey
+;     imul rax, ELEMENT_SIZE  ; rax = (ex * GRID_SIZE + ey) * ELEMENT_SIZE
+;     add rax, rdi            ; rax = address of board[ex][ey]
 
-.end:
+;     ; Check if the destination is empty
+;     cmp dword [rax], 0      ; Compare board[ex][ey] with 0
+;     jne .combine            ; If not equal, jump to .combine
+
+
+
+;     ; Update the board at [ex][ey] with the value from [sx][sy]
+;     mov dword [rax], ebx    ; board[ex][ey] = board[sx][sy] (32-bit value)
+
+;                   ; rax = 1 (success)
+;     jmp .end
+
+; .combine:
+;     ; Check if the destination is equal to the source
+;     cmp dword [rax], ebx    ; Compare board[ex][ey] with board[sx][sy]
+;     jne .end                ; If not equal, jump to .end
+
+;     ; Update the board at [ex][ey] with the value from [sx][sy]
+;     mov dword [rax], ebx    ; board[ex][ey] = board[sx][sy] (32-bit value)
+
+;     ; Multiply the value at [ex][ey] by 2
+;     shl ebx, 1              ; ebx = board[ex][ey] * 2
+
+;     ; Update the board at [ex][ey] with the new value
+;     mov dword [rax], ebx    ; board[ex][ey] = board[ex][ey] * 2
+
+;     ; rax = 1 (success)
+;     jmp .end
+
+; .end:
 
 .new_piece:
 ; new block here
