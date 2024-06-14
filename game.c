@@ -76,28 +76,59 @@ int main(int argc, char* argv[]) {
         int ex, ey;
 
         while (SDL_PollEvent(&e) != 0) {
+
             if (e.type == SDL_QUIT) {
+                printf("Quit");
                 quit = 1;
             }
-            else if (e.type == SDL_MOUSEBUTTONDOWN) {
-                int x, y;
-                SDL_GetMouseState(&x, &y);
-                sx = x / CELL_SIZE;
-                sy = y / CELL_SIZE;
 
-                printf("Mouse click at start (%d, %d)\n", sx, sy);
+            if (e.type == SDL_KEYDOWN)
+            {
+                switch(e.key.keysym.sym) {
+                    case SDLK_UP:
+                        printf("Up");
+                        break;
 
+                    case SDLK_RIGHT:
+                        printf("Right");
+                        break;
+                    
+                    case SDLK_LEFT:
+                        printf("Left");
+                        break;
+                    
+                    case SDLK_DOWN:
+                        printf("Down");
+                        break;
+
+                    default:
+                        printf("Unknown key!");
+                        break;
+                }
             }
-            else if (e.type == SDL_MOUSEBUTTONUP) {
-                int x, y;
-                SDL_GetMouseState(&x, &y);
-                ex = x / CELL_SIZE;
-                ey = y / CELL_SIZE;
 
-                printf("Mouse click at end (%d, %d)\n", ex, ey);
-                int new_board = move(board, sx, sy, ex, ey);
-                printBoard(board);
-            }
+            // if (e.type == SDL_QUIT) {
+            //     quit = 1;
+            // }
+            // else if (e.type == SDL_MOUSEBUTTONDOWN) {
+            //     int x, y;
+            //     SDL_GetMouseState(&x, &y);
+            //     sx = x / CELL_SIZE;
+            //     sy = y / CELL_SIZE;
+
+            //     printf("Mouse click at start (%d, %d)\n", sx, sy);
+
+            // }
+            // else if (e.type == SDL_MOUSEBUTTONUP) {
+            //     int x, y;
+            //     SDL_GetMouseState(&x, &y);
+            //     ex = x / CELL_SIZE;
+            //     ey = y / CELL_SIZE;
+
+            //     printf("Mouse click at end (%d, %d)\n", ex, ey);
+            //     int new_board = move(board, sx, sy, ex, ey);
+            //     printBoard(board);
+            // }
         }
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // White color for background
         SDL_RenderClear(renderer);
