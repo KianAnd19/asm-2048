@@ -7,15 +7,6 @@ section .data
 section .text
 global move
 move:
-    ; Parameters: board (rdi), sx (esi), sy (edx), ex (ecx), ey (r8d)
-
-    ; Calculate source offset (sx, sy)
-;     mov rax, rsi            ; rax = sx
-;     imul rax, GRID_SIZE     ; rax = sx * GRID_SIZE
-;     add rax, rdx            ; rax = sx * GRID_SIZE + sy
-;     imul rax, ELEMENT_SIZE  ; rax = (sx * GRID_SIZE + sy) * ELEMENT_SIZE
-;     add rax, rdi            ; rax = address of board[sx][sy]
-;     mov ebx, dword [rax]    ; ebx = board[sx][sy] (32-bit value)
     cmp esi, 0
     je .right
 
@@ -40,105 +31,84 @@ move:
 
 
 .left:
-    mov ecx, GRID_SIZE ; Loop counter for rows
-    mov r12, 0 ; current row
-
+    mov ecx, GRID_SIZE ; Loop counter for columns
     mov r13, 0 ; current column
-    mov r14, 0 ; current position
 
 .column_loop:
+    mov r12, 0 ; current row
 
 .row_loop:
+    mov rax, r12 ; rax = row
+    imul rax, GRID_SIZE ; rax = row * GRID_SIZE
+    add rax, r13 ; rax = row * GRID_SIZE + column
+    imul rax, ELEMENT_SIZE ; rax = (row * GRID_SIZE + column) * ELEMENT_SIZE
+    add rax, rdi ; rax = address of board[row][column]
+    mov ebx, dword [rax] ; ebx = board[row][column] (32-bit value)
 
-    mov rax, r12            ; rax = x
-    imul rax, GRID_SIZE     ; rax = x * GRID_SIZE
-    add rax, r13            ; rax = x * GRID_SIZE + y
-    imul rax, ELEMENT_SIZE  ; rax = (x * GRID_SIZE + y) * ELEMENT_SIZE
-    add rax, rdi            ; rax = address of board[x][y]
-    mov ebx, dword [rax]    ; ebx = board[x][y] (32-bit value)
-    
-    mov r14, r13
+    cmp ebx, 0
+    je .next_row
 
-
-.shift_loop:
-    dec r14
-
-    mov rax, r12            ; rax = x
-    imul rax, GRID_SIZE     ; rax = x * GRID_SIZE
-    add rax, r14            ; rax = x * GRID_SIZE + y
-    imul rax, ELEMENT_SIZE  ; rax = (x * GRID_SIZE + y) * ELEMENT_SIZE
-    add rax, rdi            ; rax = address of board[x][y]
+    mov r14, r13 ; r14 = current position
 
     cmp r14, 0
-    jg .shift_loop
+    je .next_row
+
+    dec r14 ; Start from j-1
+
+.shift_loop:
+    cmp r14, 0
+    jl .update_position
+
+    mov rax, r12 ; rax = row
+    imul rax, GRID_SIZE ; rax = row * GRID_SIZE
+    add rax, r14 ; rax = row * GRID_SIZE + current position
+    imul rax, ELEMENT_SIZE ; rax = (row * GRID_SIZE + current position) * ELEMENT_SIZE
+    add rax, rdi ; rax = address of board[row][current position]
+
+    cmp dword [rax], 0
+    jne .update_position
+
+    dec r14
+    jmp .shift_loop
+
+.update_position:
+    ; mov rax, r12 ; rax = row
+    ; imul rax, GRID_SIZE ; rax = row * GRID_SIZE
+    ; add rax, r14 ; rax = row * GRID_SIZE + k
+    ; imul rax, ELEMENT_SIZE ; rax = (row * GRID_SIZE + k) * ELEMENT_SIZE
+    ; add rax, rdi ; rax = address of board[row][k]
+    ; mov dword [rax], r10d ; board[row][k] = board[row][column]
+
+    inc r14 ; k += 1
+    
+    mov rax, r12 ; rax = row
+    imul rax, GRID_SIZE ; rax = row * GRID_SIZE
+    add rax, r13 ; rax = row * GRID_SIZE + column
+    imul rax, ELEMENT_SIZE ; rax = (row * GRID_SIZE + column) * ELEMENT_SIZE
+    add rax, rdi ; rax = address of board[row][column]
+    mov dword [rax], 0 ; board[row][column] = 0
+
+    mov rax, r12 ; rax = row
+    imul rax, GRID_SIZE ; rax = row * GRID_SIZE
+    add rax, r14 ; rax = row * GRID_SIZE + k
+    imul rax, ELEMENT_SIZE ; rax = (row * GRID_SIZE + k) * ELEMENT_SIZE
+    add rax, rdi ; rax = address of board[row][k]
+    mov dword [rax], ebx ; board[row][k] = board[row][column]
 
 
-    mov dword [rax], ebx    
-
-
-
-
-    ; row loop control
+.next_row:
     inc r12
     cmp r12, GRID_SIZE
     jl .row_loop
 
-    ; column loop control
     inc r13
     cmp r13, GRID_SIZE
     jl .column_loop
 
-
-
     jmp .new_piece
-
 
 .down:
     jmp .new_piece
-
-
-
-;     ; Clear the source position
-;     mov dword [rax], 0      ; board[sx][sy] = 0
-;     ; Calculate destination offset (ex, ey)
-;     ; Calculate destination offset (ex, ey)
-;     mov rax, rcx            ; rax = ex
-;     imul rax, GRID_SIZE     ; rax = ex * GRID_SIZE
-;     mov r9d, r8d            ; Move ey to r9d (32-bit) and zero-extend to r9
-;     add rax, r9             ; rax = ex * GRID_SIZE + ey
-;     imul rax, ELEMENT_SIZE  ; rax = (ex * GRID_SIZE + ey) * ELEMENT_SIZE
-;     add rax, rdi            ; rax = address of board[ex][ey]
-
-;     ; Check if the destination is empty
-;     cmp dword [rax], 0      ; Compare board[ex][ey] with 0
-;     jne .combine            ; If not equal, jump to .combine
-
-
-
-;     ; Update the board at [ex][ey] with the value from [sx][sy]
-;     mov dword [rax], ebx    ; board[ex][ey] = board[sx][sy] (32-bit value)
-
-;                   ; rax = 1 (success)
-;     jmp .end
-
-; .combine:
-;     ; Check if the destination is equal to the source
-;     cmp dword [rax], ebx    ; Compare board[ex][ey] with board[sx][sy]
-;     jne .end                ; If not equal, jump to .end
-
-;     ; Update the board at [ex][ey] with the value from [sx][sy]
-;     mov dword [rax], ebx    ; board[ex][ey] = board[sx][sy] (32-bit value)
-
-;     ; Multiply the value at [ex][ey] by 2
-;     shl ebx, 1              ; ebx = board[ex][ey] * 2
-
-;     ; Update the board at [ex][ey] with the new value
-;     mov dword [rax], ebx    ; board[ex][ey] = board[ex][ey] * 2
-
-;     ; rax = 1 (success)
-;     jmp .end
-
-; .end:
 
 .new_piece:
 ; new block here
@@ -170,64 +140,3 @@ move:
 
 .done:
     ret
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-; This should be in nasm
-; This should also check if the move is valid
-; int move(int board[GRID_SIZE][GRID_SIZE], int sx, int sy, int ex, int ey) {
-;     // Check if the start and end points are the same
-;     if (ex == sx && ey == sy) return 0;
-
-;     // Move in a straight line (row or column)
-;     if (ex - sx != 0 && ey - sy != 0) return 0;
-
-;     // Check if path is clear
-;     int stepX = (ex - sx) != 0 ? (ex - sx) / abs(ex - sx) : 0; // 1, -1 or 0
-;     int stepY = (ey - sy) != 0 ? (ey - sy) / abs(ey - sy) : 0; // 1, -1 or 0
-
-;     int x, y;
-;     for (x = sx + stepX, y = sy + stepY; x != ex || y != ey; x += stepX, y += stepY) {
-;         if (board[x][y] != 0) return 0; // Path is not clear
-;     }
-
-;     // Check the end cell
-;     if (board[ex][ey] != 0 && board[ex][ey] != board[sx][sy]) return 0;
-
-;     // Move or combine
-;     if (board[ex][ey] == 0) {
-;         board[ex][ey] = board[sx][sy];
-;     } else if (board[ex][ey] == board[sx][sy]) {
-;         board[ex][ey] *= 2;
-;     }
-
-;     board[sx][sy] = 0;
-
-;     // Add a new tile
-;     srand(time(NULL)); // Note: Ideally, srand should be called only once at the start of the main function
-;     while (1) {
-;         int r = rand() % GRID_SIZE;
-;         int c = rand() % GRID_SIZE;
-;         if (board[r][c] == 0) {
-;             board[r][c] = 2;
-;             break;
-;         }
-;     }
-
-;     return 1; // Indicate a successful move
-; }
