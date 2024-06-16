@@ -7,7 +7,7 @@
 #define GRID_SIZE 4
 
 extern int move(int board[][GRID_SIZE], int dir);
-extern void initializeBoard(int board[][GRID_SIZE]);
+extern int initializeBoard(int board[][GRID_SIZE]);
 
 // Function declarations
 void printBoard(int board[GRID_SIZE][GRID_SIZE]);
@@ -28,6 +28,9 @@ const Uint32 colours[11] = {0xFFFFFF, 0x80ffdb, 0x72efdd, 0x64dfdf, 0x56cfe1, 0x
 int main(int argc, char* argv[]) {
     SDL_Window* window = NULL;
     SDL_Renderer* renderer = NULL;
+
+    // Initialize random number generator
+    srand(time(NULL));
     
     if (TTF_Init() != 0) {
         printf("TTF_Init: %s\n", TTF_GetError());
