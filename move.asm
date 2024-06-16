@@ -72,15 +72,7 @@ move:
     jmp .shift_loop
 
 .update_position:
-    ; mov rax, r12 ; rax = row
-    ; imul rax, GRID_SIZE ; rax = row * GRID_SIZE
-    ; add rax, r14 ; rax = row * GRID_SIZE + k
-    ; imul rax, ELEMENT_SIZE ; rax = (row * GRID_SIZE + k) * ELEMENT_SIZE
-    ; add rax, rdi ; rax = address of board[row][k]
-    ; mov dword [rax], r10d ; board[row][k] = board[row][column]
-
     inc r14 ; k += 1
-    
     mov rax, r12 ; rax = row
     imul rax, GRID_SIZE ; rax = row * GRID_SIZE
     add rax, r13 ; rax = row * GRID_SIZE + column
@@ -94,6 +86,21 @@ move:
     imul rax, ELEMENT_SIZE ; rax = (row * GRID_SIZE + k) * ELEMENT_SIZE
     add rax, rdi ; rax = address of board[row][k]
     mov dword [rax], ebx ; board[row][k] = board[row][column]
+
+;check to merge
+    dec r14
+    mov r15, r12 ; rax = row
+    imul r15, GRID_SIZE ; rax = row * GRID_SIZE
+    add r15, r14 ; rax = row * GRID_SIZE + k
+    imul r15, ELEMENT_SIZE ; rax = (row * GRID_SIZE + k) * ELEMENT_SIZE
+    add r15, rdi ; rax = address of board[row][k]
+
+    cmp dword [r15], ebx
+    jne .next_row
+
+    imul ebx, 2
+    mov dword [r15], ebx
+    mov dword [rax], 0
 
 
 .next_row:
