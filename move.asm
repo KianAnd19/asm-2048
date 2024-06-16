@@ -28,7 +28,7 @@ move:
     cmp esi, 3
     je .up
 
-
+    ret
 
 
 .up:
@@ -40,6 +40,56 @@ move:
 
 
 .left:
+    mov ecx, GRID_SIZE ; Loop counter for rows
+    mov r12, 0 ; current row
+
+    mov r13, 0 ; current column
+    mov r14, 0 ; current position
+
+.column_loop:
+
+.row_loop:
+
+    mov rax, r12            ; rax = x
+    imul rax, GRID_SIZE     ; rax = x * GRID_SIZE
+    add rax, r13            ; rax = x * GRID_SIZE + y
+    imul rax, ELEMENT_SIZE  ; rax = (x * GRID_SIZE + y) * ELEMENT_SIZE
+    add rax, rdi            ; rax = address of board[x][y]
+    mov ebx, dword [rax]    ; ebx = board[x][y] (32-bit value)
+    
+    mov r14, r13
+
+
+.shift_loop:
+    dec r14
+
+    mov rax, r12            ; rax = x
+    imul rax, GRID_SIZE     ; rax = x * GRID_SIZE
+    add rax, r14            ; rax = x * GRID_SIZE + y
+    imul rax, ELEMENT_SIZE  ; rax = (x * GRID_SIZE + y) * ELEMENT_SIZE
+    add rax, rdi            ; rax = address of board[x][y]
+
+    cmp r14, 0
+    jg .shift_loop
+
+
+    mov dword [rax], ebx    
+
+
+
+
+    ; row loop control
+    inc r12
+    cmp r12, GRID_SIZE
+    jl .row_loop
+
+    ; column loop control
+    inc r13
+    cmp r13, GRID_SIZE
+    jl .column_loop
+
+
+
     jmp .new_piece
 
 

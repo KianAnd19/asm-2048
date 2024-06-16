@@ -133,8 +133,8 @@ void drawNumbers(SDL_Renderer* renderer, int board[GRID_SIZE][GRID_SIZE], TTF_Fo
             SDL_Surface* surfaceMessage = TTF_RenderText_Solid(Sans, str, Black); 
             SDL_Texture* Message = SDL_CreateTextureFromSurface(renderer, surfaceMessage);
             SDL_Rect Message_rect;
-            Message_rect.x = i * CELL_SIZE + CELL_SIZE/2 - CELL_SIZE/8;
-            Message_rect.y = j * CELL_SIZE + CELL_SIZE/2 - CELL_SIZE/8;
+            Message_rect.x = j * CELL_SIZE + CELL_SIZE/2 - CELL_SIZE/8;
+            Message_rect.y = i * CELL_SIZE + CELL_SIZE/2 - CELL_SIZE/8;
             Message_rect.w = CELL_SIZE/4;
             Message_rect.h = CELL_SIZE/4;
 
@@ -149,7 +149,7 @@ void drawGrid(SDL_Renderer* renderer, int board[GRID_SIZE][GRID_SIZE]) {
     // Drawing the cells
     for (int i = 0; i < GRID_SIZE; i++) {
         for (int j = 0; j < GRID_SIZE; j++){
-            drawRect(renderer, i * CELL_SIZE, j * CELL_SIZE, colours[board[i][j]]);
+            drawRect(renderer, j * CELL_SIZE, i * CELL_SIZE, colours[board[i][j]]);
         }
     }
 
@@ -173,4 +173,5 @@ void printBoard(int board[GRID_SIZE][GRID_SIZE]) {
         }
         printf("\n");
     }
+    printf("\n");
 }
