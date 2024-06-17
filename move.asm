@@ -376,8 +376,16 @@ move:
     mov dword [rax], 2
 
     mov rax, 1
-    jne .done
 
+    mov rcx, GRID_SIZE * GRID_SIZE  ; Total number of cells
+    mov r15, rdi                    ; Pointer to the board
+    .loop:
+        cmp dword [r15], 0          ; Set the current cell to 0
+        je .done
+        add r15, 4                  ; Move to the next cell
+        loop .loop
+
+    mov rax, 0
 
 .done:
     ret

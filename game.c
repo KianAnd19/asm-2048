@@ -86,6 +86,7 @@ int main(int argc, char* argv[]) {
                     printf("Unknown key!");
                 } else {
                     int new_board = move(board, dir);
+                    if (new_board == 0) quit = 1;
                     printBoard(board);
                 }
             }
