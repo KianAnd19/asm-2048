@@ -18,4 +18,4 @@ The following dependencies have to be installed in order for the graphics to fun
 
 ## Screenshot
 
-[screenshot](./screenshot.png)
+![screenshot](./screenshot.png)
