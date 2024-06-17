@@ -15,7 +15,7 @@ void drawGrid(SDL_Renderer* renderer, int board[GRID_SIZE][GRID_SIZE]);
 void drawRect(SDL_Renderer* renderer, int x, int y, Uint32 color);
 void drawNumbers(SDL_Renderer* renderer, int board[GRID_SIZE][GRID_SIZE], TTF_Font* Sans);
 int getRandomNumber();
-void seedRandom();
+int root(int num);
 
 const int WINDOW_WIDTH = 800;
 const int WINDOW_HEIGHT = 800;
@@ -114,10 +114,6 @@ int getRandomNumber() {\
     return rand() % max;
 }
 
-void seedRandom() {
-    srand(time(NULL));
-}
-
 void drawRect(SDL_Renderer* renderer, int x, int y, Uint32 color) {
     SDL_SetRenderDrawColor(renderer, color >> 16, (color >> 8) & 0xFF, color & 0xFF, 255);
     SDL_Rect rect = {x, y, CELL_SIZE, CELL_SIZE};
@@ -153,7 +149,7 @@ void drawGrid(SDL_Renderer* renderer, int board[GRID_SIZE][GRID_SIZE]) {
     // Drawing the cells
     for (int i = 0; i < GRID_SIZE; i++) {
         for (int j = 0; j < GRID_SIZE; j++){
-            drawRect(renderer, j * CELL_SIZE, i * CELL_SIZE, colours[board[i][j]]);
+            drawRect(renderer, j * CELL_SIZE, i * CELL_SIZE, colours[root(board[i][j])]);
         }
     }
 
@@ -178,4 +174,13 @@ void printBoard(int board[GRID_SIZE][GRID_SIZE]) {
         printf("\n");
     }
     printf("\n");
+}
+
+int root(int num){
+    int i = 0;
+    while (num > 0){
+        num = num / 2;
+        i++;
+    }
+    return i;
 }
