@@ -10,7 +10,6 @@ extern int move(int board[][GRID_SIZE], int dir);
 extern int initializeBoard(int board[][GRID_SIZE]);
 
 // Function declarations
-void printBoard(int board[GRID_SIZE][GRID_SIZE]);
 void drawGrid(SDL_Renderer* renderer, int board[GRID_SIZE][GRID_SIZE]);
 void drawRect(SDL_Renderer* renderer, int x, int y, Uint32 color);
 void drawNumbers(SDL_Renderer* renderer, int board[GRID_SIZE][GRID_SIZE], TTF_Font* Sans);
@@ -23,7 +22,6 @@ const int CELL_SIZE = 200;  // Size of each cell in the grid
 const int GRID_LINES_WIDTH = 5; // Width of the grid lines
 const int BOARD_SIZE = 4;   // 2048 is a 4x4 grid
 const Uint32 colours[11] = {0xFFFFFF, 0x80ffdb, 0x72efdd, 0x64dfdf, 0x56cfe1, 0x48bfe3, 0x4ea8de, 0x5390d9, 0x5e60ce, 0x6930c3, 0x7400b8};
-
 
 int main(int argc, char* argv[]) {
     SDL_Window* window = NULL;
@@ -67,8 +65,6 @@ int main(int argc, char* argv[]) {
 
     int board[GRID_SIZE][GRID_SIZE];
     initializeBoard(board);
-    printBoard(board);
-
 
     // Main loop
     while (!quit) {
@@ -79,15 +75,14 @@ int main(int argc, char* argv[]) {
 
             if (e.type == SDL_QUIT) quit = 1;
 
-            if (e.type == SDL_KEYDOWN)
-            {
+            if (e.type == SDL_KEYDOWN) {
+                if (e.key.keysym.sym == SDLK_ESCAPE) quit = 1;
                 int dir = e.key.keysym.sym - SDLK_RIGHT;
                 if (dir < 0 || dir > 3) {
                     printf("Unknown key!");
                 } else {
                     int new_board = move(board, dir);
                     if (new_board == 0) quit = 1;
-                    printBoard(board);
                 }
             }
         }
@@ -104,7 +99,6 @@ int main(int argc, char* argv[]) {
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
-
     return 0;
 }
 
@@ -163,17 +157,6 @@ void drawGrid(SDL_Renderer* renderer, int board[GRID_SIZE][GRID_SIZE]) {
     for (int j = 0; j <= BOARD_SIZE; j++) {
         SDL_RenderDrawLine(renderer, 0, j * CELL_SIZE, BOARD_SIZE * CELL_SIZE, j * CELL_SIZE);
     }
-}
-
-//Dont need this
-void printBoard(int board[GRID_SIZE][GRID_SIZE]) {
-    for (int i = 0; i < GRID_SIZE; i++) {
-        for (int j = 0; j < GRID_SIZE; j++) {
-            printf("%4d", board[i][j]);
-        }
-        printf("\n");
-    }
-    printf("\n");
 }
 
 int root(int num){
